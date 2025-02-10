@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\Category;
@@ -15,13 +14,16 @@ class CategorySeeder extends Seeder
             'Hogar',
             'Deportes',
             'Móviles',
-            'Informática',
+            'Informática',            <?php
+            php artisan tinker
+            >>> App\Models\Category::truncate();
+            >>> exit
             'Juegos',
             'Libros'
         ];
 
         foreach ($categories as $category) {
-            Category::create(['name' => $category]);
+            Category::firstOrCreate(['name' => $category]);
         }
     }
 }

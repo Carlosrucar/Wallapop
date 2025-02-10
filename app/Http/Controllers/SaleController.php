@@ -40,13 +40,33 @@ class SaleController extends Controller
 
     $sale = Sale::create($validatedData);
 
+    // Guardar imágenes si se envían en el request
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('sales', 'public');
+
+            Image::create([
+                'sale_id' => $sale->id,
+                'route' => $path,
+            ]);
+        }
+    }
+
     return redirect()->route('sales.index')
         ->with('success', 'Producto publicado correctamente');
-    }   
+}
 
-    public function show(Sale $sale)
-    {
-        $sale->load(['images', 'category']);
-        return view('sales.show', compact('sale'));
-    }
+public function show(Sale $sale)
+{
+    return view('sales.show', compact('sale'));
+}
+
+public function destroy(Sale $sale)
+{
+    $sale->delete();
+    return redirect()->route('sales.index')
+        ->with('success', 'Publicación eliminada correctamente');
+}
+    
+    
 }

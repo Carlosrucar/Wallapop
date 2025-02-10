@@ -1,6 +1,4 @@
-
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
@@ -19,6 +17,20 @@
             background-color: var(--primary-color) !important;
         }
 
+        .nav-link {
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            color: white !important;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 5px;
+        }
+
+        /* Existing styles below */
         .btn-custom {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -51,35 +63,52 @@
             border-radius: 25px;
             padding: 0.75rem 1.5rem;
         }
+
+        body,
+        html {
+            height: 100%;
+        }
     </style>
 </head>
 
-<body class="bg-light">
+<body class="d-flex flex-column min-vh-100 bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <div class="container"> <a class="navbar-brand fw-bold" href="{{ route('home') }}"> <i
-                    class="fas fa-store me-2"></i>{{ \App\Models\Setting::first()->name ?? 'Wallapop' }} </a> <button
-                class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> <span
-                    class="navbar-toggler-icon"></span> </button>
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ route('home') }}">
+                <i class="fas fa-store me-2"></i>{{ \App\Models\Setting::first()->name ?? 'Wallapop' }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <form class="d-flex mx-auto" style="width: 50%;"> <input class="form-control search-bar me-2"
-                        type="search" placeholder="¿Qué estás buscando?"> </form>
+                <form action="{{ route('products.index') }}" method="GET" class="d-flex mx-auto" style="width: 50%;">
+                    <input class="form-control search-bar me-2" type="search" name="search"
+                        placeholder="¿Qué estás buscando?">
+                </form>
                 <ul class="navbar-nav">
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('sales.create') }}"> <i
-                                class="fas fa-plus-circle me-1"></i>Vender </a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="#"> <i class="fas fa-heart me-1"></i>Favoritos </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('sales.create') }}">
+                            <i class="fas fa-plus-circle me-1"></i>Vender
+                        </a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link" href="#"> <i class="fas fa-user me-1"></i>Mi Cuenta </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-heart me-1"></i>Favoritos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('account.index') }}"><i class="fas fa-user me-1"></i>Mi
+                            Cuenta</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container py-4">
+    <!-- Main container with flex-grow to push footer to the bottom -->
+    <main class="container flex-grow-1 py-4">
         @yield('content')
     </main>
 
-    <footer class="bg-dark text-light py-4 mt-5">
+    <footer class="bg-dark text-light py-4 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -107,3 +136,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
