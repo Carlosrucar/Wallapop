@@ -10,15 +10,42 @@ use Illuminate\Http\Request;
 class SaleController extends Controller
 {
     
-    public function index()
-    {
-        $sales = Sale::where('issold', false)
-            ->with(['category', 'user'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
-            
-        return view('sales.index', compact('sales'));
+    public function index(Request $request)
+{
+    $query = Sale::where('issold', false)->with(['category', 'user']);
+    
+    // Filtrado
+    if ($request->filled('category')) {
+        $query->where('category_id', $request->category);
     }
+    
+    if ($request->filled('price_min')) {
+        $query->where('price', '>=', floatval($request->price_min));
+    }
+    
+    if ($request->filled('price_max')) {
+        $query->where('price', '<=', floatval($request->price_max));
+    }
+    
+    // Ordenamiento
+    $allowedSortFields = ['created_at', 'price'];
+    $allowedDirections = ['asc', 'desc'];
+    
+    $sort = in_array($request->get('sort'), $allowedSortFields) 
+        ? $request->get('sort') 
+        : 'created_at';
+        
+    $direction = in_array($request->get('direction'), $allowedDirections) 
+        ? $request->get('direction') 
+        : 'desc';
+    
+    $query->orderBy($sort, $direction);
+    
+    $sales = $query->paginate(12)->withQueryString();
+    $categories = Category::all();
+    
+    return view('sales.index', compact('sales', 'categories'));
+}
 
     public function create()
     {

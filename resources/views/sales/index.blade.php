@@ -1,19 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Productos Destacados</h2>
-            <div class="btn-group">
-                <button class="btn btn-outline-secondary">
-                    <i class="fas fa-filter me-1"></i>Filtrar
-                </button>
-                <button class="btn btn-outline-secondary">
-                    <i class="fas fa-sort me-1"></i>Ordenar
-                </button>
+<div class="btn-group">
+    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+        <i class="fas fa-filter me-1"></i>Filtrar
+    </button>
+    <div class="btn-group">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-sort me-1"></i>Ordenar
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'desc']) }}">Más recientes</a></li>
+            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'asc']) }}">Más antiguos</a></li>
+            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'asc']) }}">Precio más bajo</a></li>
+            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'desc']) }}">Precio más alto</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="collapse mt-3" id="filterCollapse">
+    <div class="card card-body">
+        <form action="{{ route('sales.index') }}" method="GET">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Categoría</label>
+                        <select name="category" class="form-select">
+                            <option value="">Todas las categorías</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Precio mínimo</label>
+                        <input type="number" name="price_min" class="form-control" value="{{ request('price_min') }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Precio máximo</label>
+                        <input type="number" name="price_max" class="form-control" value="{{ request('price_max') }}">
+                    </div>
+                </div>
             </div>
-        </div>
+            <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+            <a href="{{ route('sales.index') }}" class="btn btn-outline-secondary">Limpiar filtros</a>
+        </form>
     </div>
 </div>
 
