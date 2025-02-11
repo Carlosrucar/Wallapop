@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', [SaleController::class, 'index'])->name('home');
 Route::resource('sales', SaleController::class);
@@ -11,6 +12,8 @@ Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.
 Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'index'])->name('account.index');
     Route::post('/account', [AccountController::class, 'update'])->name('account.update');
+    Route::get('/messages/{sale}/{user}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{sale}/{user}', [MessageController::class, 'store'])->name('messages.store');
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

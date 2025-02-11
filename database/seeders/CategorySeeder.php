@@ -14,10 +14,7 @@ class CategorySeeder extends Seeder
             'Hogar',
             'Deportes',
             'Móviles',
-            'Informática',            <?php
-            php artisan tinker
-            >>> App\Models\Category::truncate();
-            >>> exit
+            'Informática',          
             'Juegos',
             'Libros'
         ];

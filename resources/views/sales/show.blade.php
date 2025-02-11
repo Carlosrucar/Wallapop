@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -18,26 +17,26 @@
                     <div class="carousel-inner">
                         @forelse($sale->images as $key => $image)
                             <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                                <img src="{{ asset('storage/' . $image->route) }}" 
-                                     class="d-block w-100" 
-                                     alt="{{ $sale->product }}"
-                                     style="height: 400px; object-fit: contain;">
+                                <img src="{{ asset('storage/' . $image->route) }}" class="d-block w-100"
+                                    alt="{{ $sale->product }}" style="height: 400px; object-fit: contain;">
                             </div>
                         @empty
                             <div class="carousel-item active">
-                                <div class="bg-secondary d-flex align-items-center justify-content-center" 
-                                     style="height: 400px;">
+                                <div class="bg-secondary d-flex align-items-center justify-content-center"
+                                    style="height: 400px;">
                                     <i class="fas fa-image fa-3x text-white"></i>
                                 </div>
                             </div>
                         @endforelse
                     </div>
                     @if($sale->images->count() > 1)
-                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
+                            data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
+                            data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
@@ -57,12 +56,20 @@
                     </p>
                     <hr>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-custom btn-lg">
-                            <i class="fas fa-comment-alt me-2"></i>Chat con el vendedor
-                        </button>
-                        <button class="btn btn-outline-danger">
-                            <i class="far fa-heart me-2"></i>Añadir a favoritos
-                        </button>
+                        @if(Auth::check() && Auth::id() !== $sale->user_id)
+                            <a href="{{ route('messages.show', ['sale' => $sale, 'user' => $sale->user]) }}"
+                                class="btn btn-custom btn-lg">
+                                <i class="fas fa-comment-alt me-2"></i>Chat con el vendedor
+                            </a>
+                        @elseif(!Auth::check())
+                            <a href="{{ route('login') }}" class="btn btn-custom btn-lg">
+                                <i class="fas fa-comment-alt me-2"></i>Inicia sesión para chatear
+                            </a>
+                        @else
+                            <button class="btn btn-custom btn-lg" disabled>
+                                <i class="fas fa-comment-alt me-2"></i>Este es tu producto
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -78,7 +85,8 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-0">{{ $sale->user->name ?? 'Usuario' }}</h6>
-                            <small class="text-muted">Miembro desde {{ $sale->user->created_at->format('M Y') ?? 'hace tiempo' }}</small>
+                            <small class="text-muted">Miembro desde
+                                {{ $sale->user->created_at->format('M Y') ?? 'hace tiempo' }}</small>
                         </div>
                     </div>
                     <p class="mb-0">
