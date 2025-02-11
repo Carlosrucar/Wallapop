@@ -6,12 +6,14 @@ use App\Models\Sale;
 use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SaleController extends Controller
 {
     
     public function index(Request $request)
 {
+
     $query = Sale::where('issold', false)->with(['category', 'user']);
     
     // Filtrado
@@ -94,6 +96,55 @@ public function destroy(Sale $sale)
     return redirect()->route('sales.index')
         ->with('success', 'Publicación eliminada correctamente');
 }
+
+public function edit(Sale $sale)
+{
+    if (Auth::id() !== $sale->user_id) {
+        return redirect()->route('sales.show', $sale)
+            ->with('error', 'No autorizado para editar este producto');
+    }
     
+    $categories = Category::all();
+    return view('sales.edit', compact('sale', 'categories'));
+}
+
+public function update(Request $request, Sale $sale)
+{
+    // Check if user owns the sale
+    if (Auth::id() !== $sale->user_id) {
+        return redirect()->route('sales.show', $sale)
+            ->with('error', 'No autorizado para editar este producto');
+    }
+
+    $validatedData = $request->validate([
+        'product' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'category_id' => 'required|exists:categories,id',
+    ]);
+
+    $sale->update($validatedData);
+
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('sales', 'public');
+            
+            Image::create([
+                'sale_id' => $sale->id,
+                'route' => $path
+            ]);
+        }
+    }
+
+    return redirect()->route('sales.show', $sale)
+        ->with('success', 'Producto actualizado correctamente');
+}
+    
+
+public function markAsSold(Sale $sale)
+{
+    $sale->update(['issold' => true]);
+    return redirect()->back()->with('success', 'Producto marcado como vendido');
+}
     
 }

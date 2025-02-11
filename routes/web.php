@@ -4,11 +4,12 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MessageController; 
 
 Route::get('/', [SaleController::class, 'index'])->name('home');
 Route::resource('sales', SaleController::class);
-Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');
+Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');    
+
 Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'index'])->name('account.index');
     Route::post('/account', [AccountController::class, 'update'])->name('account.update');
@@ -23,3 +24,4 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+Route::put('/sales/{sale}/mark-sold', [SaleController::class, 'markAsSold'])->name('sales.markSold');

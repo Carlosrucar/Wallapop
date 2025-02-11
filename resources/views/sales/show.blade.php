@@ -56,19 +56,27 @@
                     </p>
                     <hr>
                     <div class="d-grid gap-2">
-                        @if(Auth::check() && Auth::id() !== $sale->user_id)
+                        @if(Auth::check() && Auth::id() === $sale->user_id)
+                            <a href="{{ route('sales.edit', $sale) }}" class="btn btn-warning btn-lg">
+                                <i class="fas fa-edit me-2"></i>Editar producto
+                            </a>
+                            <form action="{{ route('sales.destroy', $sale) }}" method="POST"
+                                onsubmit="return confirm('¿Está seguro que desea eliminar esta publicación?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-lg w-100">
+                                    <i class="fas fa-trash-alt me-2"></i>Eliminar producto
+                                </button>
+                            </form>
+                        @elseif(Auth::check())
                             <a href="{{ route('messages.show', ['sale' => $sale, 'user' => $sale->user]) }}"
                                 class="btn btn-custom btn-lg">
                                 <i class="fas fa-comment-alt me-2"></i>Chat con el vendedor
                             </a>
-                        @elseif(!Auth::check())
+                        @else
                             <a href="{{ route('login') }}" class="btn btn-custom btn-lg">
                                 <i class="fas fa-comment-alt me-2"></i>Inicia sesión para chatear
                             </a>
-                        @else
-                            <button class="btn btn-custom btn-lg" disabled>
-                                <i class="fas fa-comment-alt me-2"></i>Este es tu producto
-                            </button>
                         @endif
                     </div>
                 </div>
@@ -101,7 +109,7 @@
     <div class="row mt-4">
         <div class="col-12">
             <h4>Productos similares</h4>
-            <!-- Aquí puedes añadir una lista de productos similares -->
+
         </div>
     </div>
 </div>

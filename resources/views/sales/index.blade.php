@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="btn-group">
+<div class="btn-group mb-4">
     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
         <i class="fas fa-filter me-1"></i>Filtrar
     </button>
@@ -10,10 +10,18 @@
             <i class="fas fa-sort me-1"></i>Ordenar
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'desc']) }}">Más recientes</a></li>
-            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'asc']) }}">Más antiguos</a></li>
-            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'asc']) }}">Precio más bajo</a></li>
-            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'desc']) }}">Precio más alto</a></li>
+            <li><a class="dropdown-item"
+                    href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'desc']) }}">Más
+                    recientes</a></li>
+            <li><a class="dropdown-item"
+                    href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'asc']) }}">Más
+                    antiguos</a></li>
+            <li><a class="dropdown-item"
+                    href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'asc']) }}">Precio más
+                    bajo</a></li>
+            <li><a class="dropdown-item"
+                    href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'desc']) }}">Precio más
+                    alto</a></li>
         </ul>
     </div>
 </div>
@@ -77,12 +85,24 @@
                             <button class="btn btn-sm btn-outline-danger me-1">
                                 <i class="far fa-heart"></i>
                             </button>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-comment"></i>
+                            </button>
+                            <form action="{{ route('sales.markSold', $sale) }}" method="POST" class="d-inline"
+                                onsubmit="return confirm('¿Está seguro que desea eliminar esta publicación?');">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-sm btn-success me-1">
+                                    <i class="fas fa-shopping-cart"></i> Comprar
+                                </button>
+                            </form>
+
                             <a href="{{ route('sales.show', $sale) }}" class="btn btn-sm btn-custom">Ver más</a>
                         </div>
                     </div>
 
                     <form action="{{ route('sales.destroy', $sale) }}" method="POST" class="mt-2"
-                        onsubmit="return confirm('¿Está seguro que desea eliminar esta publicación?')">
+                        onsubmit="return confirm('¿Está seguro que desea comprar esta publicación?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-outline-danger w-100">

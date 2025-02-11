@@ -12,7 +12,7 @@
                         <img src="{{ asset('storage/' . $sale->images->first()->route) }}" 
                             alt="{{ $sale->product }}" 
                             class="img-fluid rounded mb-3"
-                            style="height: 300px; width: 150px; object-fit: cover; display: block; margin: 0 auto;">
+                            style="height: 300px; width: 350px; object-fit: cover; display: block; margin: 0 auto;">
                     @endif
                     <div class="text-muted mb-3">
                         <p class="mb-2">

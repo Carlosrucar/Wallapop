@@ -11,7 +11,8 @@ class Sale extends Model
         'description',
         'price',
         'category_id',
-        'user_id'
+        'user_id',
+        'issold'
     ];
 
     public function category()
