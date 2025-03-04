@@ -99,23 +99,12 @@ public function destroy(Sale $sale)
 
 public function edit(Sale $sale)
 {
-    if (Auth::id() !== $sale->user_id) {
-        return redirect()->route('sales.show', $sale)
-            ->with('error', 'No autorizado para editar este producto');
-    }
-    
     $categories = Category::all();
     return view('sales.edit', compact('sale', 'categories'));
 }
 
 public function update(Request $request, Sale $sale)
 {
-    // Check if user owns the sale
-    if (Auth::id() !== $sale->user_id) {
-        return redirect()->route('sales.show', $sale)
-            ->with('error', 'No autorizado para editar este producto');
-    }
-
     $validatedData = $request->validate([
         'product' => 'required',
         'description' => 'required',
@@ -128,7 +117,6 @@ public function update(Request $request, Sale $sale)
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $image) {
             $path = $image->store('sales', 'public');
-            
             Image::create([
                 'sale_id' => $sale->id,
                 'route' => $path
@@ -139,7 +127,6 @@ public function update(Request $request, Sale $sale)
     return redirect()->route('sales.show', $sale)
         ->with('success', 'Producto actualizado correctamente');
 }
-    
 
 public function markAsSold(Sale $sale)
 {

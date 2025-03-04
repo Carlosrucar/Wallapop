@@ -92,12 +92,20 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-heart me-1"></i>Favoritos</a>
+                        <a class="nav-link" href="{{ route('account.index') }}">
+                            <i class="fas fa-user me-1"></i>Mi Cuenta
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('account.index') }}"><i class="fas fa-user me-1"></i>Mi
-                            Cuenta</a>
-                    </li>
+                    @auth
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="nav-link border-0 bg-transparent">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Cerrar sesión
+                                </button>
+                            </form>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>

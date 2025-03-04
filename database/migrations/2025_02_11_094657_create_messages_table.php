@@ -12,9 +12,11 @@ return new class extends Migration {
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->constrained('users');
-            $table->foreignId('receiver_id')->constrained('users');
-            $table->foreignId('sale_id')->constrained('sales');
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('sale_id')
+                  ->constrained('sales')
+                  ->onDelete('cascade');
             $table->text('content');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();

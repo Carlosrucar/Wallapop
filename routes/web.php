@@ -25,3 +25,5 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 Route::put('/sales/{sale}/mark-sold', [SaleController::class, 'markAsSold'])->name('sales.markSold');
+
+Route::post('/logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
